@@ -1,6 +1,5 @@
 import ast
 
-
 # функция для подсчета ширина для каждой колонки для json
 def size_columns_json(data, titles):
     size_c = {}
@@ -15,7 +14,6 @@ def size_columns_json(data, titles):
         if size_c[i] < len(i):
             size_c[i] = len(i)
     return size_c
-
 
 # функция для подсчета ширина для каждой колонки для tsv
 def size_columns_tsv(data, titles):
@@ -36,14 +34,14 @@ def print_table(data, format_data):
         data = ast.literal_eval(data)
         titles = list(data[0].keys())
         size_c = size_columns_json(data=data, titles=titles)
-        lines = sum(list(size_c.values()))  # подсчет кол-ва -
-        count_c = len(list(size_c.values()))  # количество столбцов
-        a = ['-'] * (lines + 4 * count_c + count_c + 1)  # вывод линии
+        lines = sum(list(size_c.values()))          # подсчет кол-ва -
+        count_c = len(list(size_c.values()))        # количество столбцов
+        a = ['-'] * (lines + 5 * count_c + count_c + 1) # вывод линии
         print(*a, sep='')
         print('|', end='', sep='')
         # вывод названий столбцов по центру
         for i in titles:
-            print(i.center(2 + 2 + size_c[i]), end='|')
+            print(i.center(3 + 2 + size_c[i]), end='|')
         print()
         # вывод данных
         for i in range(len(data)):
@@ -51,11 +49,13 @@ def print_table(data, format_data):
             for j in titles:
                 x = str(data[i][j])
                 if j != titles[-1]:
-                    print('  ', x.ljust(size_c[j] + 2), '|', end='', sep='')
+                    print('  ', x.ljust(size_c[j] + 3), '|', end='', sep='')
                 else:
-                    print(x.rjust(2 + size_c[j], ' '), '  |', end='', sep='')
+                    print(x.rjust(3 + size_c[j], ' '), '  |', end='', sep='')
             print()
         print(*a, sep='')
+
+
     # если файл формата tsv
     elif format_data == 'tsv':
         data = data.split('\n')
@@ -70,23 +70,23 @@ def print_table(data, format_data):
         size_c = size_columns_tsv(data=list_of_lists[1::], titles=titles)
         count_c = len(titles)
 
-        a = ['-'] * (sum(size_c) + count_c + 2 * count_c + 2 * count_c + 1)
+        a = ['-'] * (sum(size_c) + count_c + 2 * count_c + 3 * count_c + 1)
         print(*a, sep='')
         print('|', end='')
         # вывод всех данных кроме последнего столбца
         for j in range(count_c - 1):
             x = str(list_of_lists[0][j])
-            print(x.center(size_c[j] + 4), end='|', sep='')
+            print(x.center(size_c[j] + 5), end='|', sep='')
         x = str(list_of_lists[0][count_c - 1])
-        print(x.rjust(size_c[count_c - 1] + 2), '  ', end='|', sep='')
+        print(x.rjust(size_c[count_c - 1] + 3), '  ', end='|', sep='')
         print()
         # вывод последнего столбца
         for i in range(1, len(list_of_lists)):
             print('|', end='')
             for j in range(count_c - 1):
                 x = str(list_of_lists[i][j])
-                print('  ', x.ljust(size_c[j] + 2), end='|', sep='')
+                print('  ', x.ljust(size_c[j] + 3), end='|', sep='')
             x = str(list_of_lists[i][count_c - 1])
-            print(x.rjust(size_c[count_c - 1] + 2), '  ', end='|', sep='')
+            print(x.rjust(size_c[count_c - 1] + 3), '  ', end='|', sep='')
             print()
         print(*a, sep='', end='')

@@ -1,16 +1,17 @@
 def open_file(filename):
-    code = ['utf-16', 'utf-8', 'cp1251']
+    code = ['utf-8', 'utf-16', 'cp1251']
 
     for i in code:
         try:
             with open(file=filename, encoding=i) as f:
-                data = f.readlines()
+                data = f.read()
                 return data
-        except (TypeError,  SyntaxError, AttributeError, UnicodeDecodeError, UnicodeError):
-            continue
         except FileNotFoundError:
             print("Файл не валиден")
-            return -1
-
+            raise FileNotFoundError
+        except UnicodeDecodeError:
+            continue
+        except UnicodeError:
+            continue
     print("Формат не валиден")
-    return -1
+    raise UnicodeDecodeError
